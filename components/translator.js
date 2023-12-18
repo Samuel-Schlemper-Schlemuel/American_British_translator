@@ -52,12 +52,40 @@ class Translator {
         if(locale){
             for(let key in americanToBritishTitles){
                 let re = new RegExp(`${key.replace('.', '\\.')} `, 'gi')
-                result = result.replace(re, `<span class="highlight"> ${americanToBritishTitles[key]} </span>`)
+                result = result.replace(re, `<span class="highlight">${americanToBritishTitles[key]}</span> `)
             }
         } else {
             for(let key in americanToBritishTitles){
                 let re = new RegExp(`${americanToBritishTitles[key]} `, 'gi')
-                result = result.replace(re, `<span class="highlight"> ${key} </span>`)
+                result = result.replace(re, `<span class="highlight">${key}</span> `)
+            }
+        }
+
+        return result
+    }
+
+    words(text, locale){
+        let result = text
+
+        if(locale){
+            for(let key in americanOnly){
+                let re = new RegExp(`${key} `, 'gi')
+                result = result.replace(re, `<span class="highlight">${americanOnly[key]}</span> `)
+            }
+
+            for(let key in americanToBritishSpelling){
+                let re = new RegExp(`${key} `, 'gi')
+                result = result.replace(re, `<span class="highlight">${americanToBritishSpelling[key]}</span> `)
+            }
+        } else {
+            for(let key in britishOnly){
+                let re = new RegExp(`${key} `, 'gi')
+                result = result.replace(re, `<span class="highlight">${britishOnly[key]}</span> `)
+            }
+
+            for(let key in americanToBritishSpelling){
+                let re = new RegExp(`${americanToBritishSpelling[key]} `, 'gi')
+                result = result.replace(re, `<span class="highlight">${key}</span> `)
             }
         }
 
@@ -72,10 +100,17 @@ class Translator {
         }
 
         locale = locale == 'american-to-british' ? true : false
+        text = text + ' '
 
         let result = this.time(text, locale)
         result = this.titles(result, locale)
-        return {text: text, translation: result}
+        result = this.words(result, locale)
+
+        if(result == text){
+            result = 'Everything looks good to me!'
+        }
+
+        return {text: text.replace(/\s$/, ''), translation: result.replace(/^./, result[0].toUpperCase()).replace(/\s$/, '')}
     }
 }
 
