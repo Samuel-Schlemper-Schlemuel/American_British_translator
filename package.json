@@ -22,5 +22,8 @@
     "nodemon": "^2.0.4"
   },
   "license": "MIT",
-  "authors": ["Samuel Schlemper", "FCC"]
+  "authors": [
+    "Samuel Schlemper",
+    "FCC"
+  ]
 }

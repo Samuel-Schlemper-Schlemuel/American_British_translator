@@ -22,22 +22,42 @@ class Translator {
         let result = text, arr
 
         if(locale){
-            arr = text.match( /\d\d:\d\d/g)
+            arr = text.match( /\d+:\d\d/g)
 
             if(arr){
                 for(let i in arr){
                     let sep = arr[i].split('')
-                    let changed = `<span class="highlight">${sep[0]}${sep[1]}.${sep[3]}${sep[4]}</span>`
+                    let data = ''
+
+                    for(let c in sep){
+                        if(sep[c] == ':'){
+                            data += '.'
+                        } else {
+                            data += sep[c]
+                        }
+                    }
+
+                    let changed = `<span class="highlight">${data}</span>`
                     result = result.replace(arr[i], changed)
                 }
             }
         } else {
-            arr = text.match( /\d\d\.\d\d/g)
+            arr = text.match( /\d+\.\d\d/g)
 
             if(arr){
                 for(let i in arr){
                     let sep = arr[i].split('')
-                    let changed = `<span class="highlight">${sep[0]}${sep[1]}:${sep[3]}${sep[4]}</span>`
+                    let data = ''
+
+                    for(let c in sep){
+                        if(sep[c] == '.'){
+                            data += ':'
+                        } else {
+                            data += sep[c]
+                        }
+                    }
+
+                    let changed = `<span class="highlight">${data}</span>`
                     result = result.replace(arr[i], changed)
                 }
             }
